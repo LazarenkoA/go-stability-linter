@@ -38,7 +38,7 @@ This ensures that your code follows a clean architecture where core components a
 To install the Go Dependency Stability Linter, use the following command:
 
 ```bash
-go install github.com/yourusername/go-dep-stability@latest
+go install github.com/LazarenkoA/go-stability-linter@latest
 ```
 
 Make sure your Go environment is set up, and `$GOPATH/bin` is added to your system's PATH.

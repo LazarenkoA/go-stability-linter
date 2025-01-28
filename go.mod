@@ -1,4 +1,4 @@
-module stabilityIndicators
+module github.com/LazarenkoA/go-stability-linter
 
 go 1.22.0
 

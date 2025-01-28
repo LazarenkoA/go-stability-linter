@@ -1,6 +1,7 @@
 package app_module
 
 import (
+	"github.com/LazarenkoA/go-stability-linter/app"
 	"github.com/pkg/errors"
 	"github.com/samber/lo"
 	"golang.org/x/mod/modfile"
@@ -10,7 +11,6 @@ import (
 	"os"
 	"path/filepath"
 	"slices"
-	"stabilityIndicators/app"
 	"strings"
 )
 

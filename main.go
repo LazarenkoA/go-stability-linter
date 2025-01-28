@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
+	"github.com/LazarenkoA/go-stability-linter/app_module"
 	"github.com/spf13/cobra"
 	"os"
-	"stabilityIndicators/app_module"
 )
 
 func init() {

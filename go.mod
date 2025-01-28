@@ -9,6 +9,7 @@ require (
 	github.com/spf13/cobra v1.8.1 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/ungerik/go-dry v0.0.0-20250114120308-5f4c15c68819 // indirect
+	golang.org/x/exp v0.0.0-20250128144449-3edf0e91c1ae // indirect
 	golang.org/x/mod v0.22.0 // indirect
 	golang.org/x/sync v0.10.0 // indirect
 	golang.org/x/text v0.21.0 // indirect

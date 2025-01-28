@@ -4,13 +4,12 @@ import (
 	"github.com/LazarenkoA/go-stability-linter/app"
 	"github.com/pkg/errors"
 	"github.com/samber/lo"
+	"golang.org/x/exp/maps"
 	"golang.org/x/mod/modfile"
 	"golang.org/x/tools/go/packages"
 	"io"
-	"maps"
 	"os"
 	"path/filepath"
-	"slices"
 	"strings"
 )
 
@@ -56,7 +55,7 @@ func (l *stabilityLint) cast(pkg []*packages.Package) []*app.RawPackageInfo {
 			ID:      p.ID,
 			Path:    p.PkgPath,
 			Name:    p.Name,
-			Imports: l.cast(slices.Collect(maps.Values(p.Imports))),
+			Imports: l.cast(maps.Values(p.Imports)),
 		})
 	}
 

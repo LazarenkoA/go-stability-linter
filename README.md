@@ -19,6 +19,11 @@ Where:
 - `I = 0` indicates maximum stability.
 - `I = 1` indicates maximum instability.
 
+### Key Rule
+
+The linter checks for architectural violations by enforcing the rule that **less stable components (with higher instability) must only depend on more stable components (with lower instability)**. If a more stable module depends on a less stable one, the linter will raise an error.
+
+This ensures that your code follows a clean architecture where core components are stable and less prone to change, while higher-level components can safely depend on them without breaking stability.
 
 
 ## Features

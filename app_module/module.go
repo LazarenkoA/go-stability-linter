@@ -13,13 +13,15 @@ import (
 	"strings"
 )
 
-type RR struct {
-}
-
 type stabilityLint struct {
 	mainName    string
 	stdPackages []*packages.Package
 	packages    []*app.RawPackageInfo
+}
+
+type CheckLogsInfo struct {
+	Package string
+	I       float64
 }
 
 func NewLint(rootDir string) (*stabilityLint, error) {
@@ -64,6 +66,20 @@ func (l *stabilityLint) cast(pkg []*packages.Package) []*app.RawPackageInfo {
 
 func (l *stabilityLint) Check() error {
 	return app.Check(l.mainName, l.packages)
+}
+
+func (l *stabilityLint) CheckLog() []*CheckLogsInfo {
+	pInfo := app.GetPackageInfo(l.mainName, l.packages)
+	result := make([]*CheckLogsInfo, 0, len(pInfo))
+
+	for _, v := range pInfo {
+		result = append(result, &CheckLogsInfo{
+			Package: v.ID,
+			I:       v.Stability,
+		})
+	}
+
+	return result
 }
 
 func (l *stabilityLint) isStdPackage(pkgPath string) bool {

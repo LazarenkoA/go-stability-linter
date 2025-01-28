@@ -3,6 +3,8 @@ package app
 import (
 	"errors"
 	"fmt"
+	"golang.org/x/exp/maps"
+	"math"
 	"strings"
 )
 
@@ -10,9 +12,9 @@ import (
 // То есть метрики должны уменьшаться в направлении зависимости.
 
 type packageInfo struct {
-	id        string
+	ID        string
 	name      string
-	stability float64 // О - соответствует максимальной устойчивости компонента, 1 - максимальной неустойчивости.
+	Stability float64 // О - соответствует максимальной устойчивости компонента, 1 - максимальной неустойчивости.
 	inCount   int
 	outCount  int
 	parent    *packageInfo
@@ -26,15 +28,24 @@ type RawPackageInfo struct {
 }
 
 func Check(currentApp string, packages []*RawPackageInfo) error {
+	return check(getPackageInfo(currentApp, packages))
+}
+
+func GetPackageInfo(currentApp string, packages []*RawPackageInfo) []*packageInfo {
+	return maps.Values(getPackageInfo(currentApp, packages))
+}
+
+func getPackageInfo(currentApp string, packages []*RawPackageInfo) map[string]*packageInfo {
 	result := make(map[string]*packageInfo, len(packages))
 	for _, m := range packages {
 		if p := createItem(currentApp, result, m); p != nil {
-			result[p.id] = p
+			result[p.ID] = p
 		}
 	}
 
 	calcStability(result)
-	return check(result)
+
+	return result
 }
 
 func calcStability(existing map[string]*packageInfo) {
@@ -47,7 +58,11 @@ func helperCalcStability(pkg *packageInfo) {
 	if pkg == nil {
 		return
 	}
-	pkg.stability = float64(pkg.outCount) / float64(pkg.outCount+pkg.inCount)
+	pkg.Stability = float64(pkg.outCount) / float64(pkg.outCount+pkg.inCount)
+
+	if math.IsNaN(pkg.Stability) {
+		pkg.Stability = 0
+	}
 }
 
 func createItem(currentApp string, existing map[string]*packageInfo, pkg *RawPackageInfo) *packageInfo {
@@ -60,7 +75,7 @@ func createItem(currentApp string, existing map[string]*packageInfo, pkg *RawPac
 	}
 
 	pinfo := &packageInfo{
-		id:   pkg.ID,
+		ID:   pkg.ID,
 		name: pkg.Name,
 	}
 
@@ -79,8 +94,8 @@ func createItem(currentApp string, existing map[string]*packageInfo, pkg *RawPac
 
 func check(pkgs map[string]*packageInfo) (err error) {
 	for _, pkg := range pkgs {
-		if pkg.parent != nil && pkg.stability > pkg.parent.stability {
-			err = errors.Join(err, fmt.Errorf("%s (%.2f) -> %s (%.2f)\n", pkg.parent.id, pkg.parent.stability, pkg.id, pkg.stability))
+		if pkg.parent != nil && pkg.Stability > pkg.parent.Stability {
+			err = errors.Join(err, fmt.Errorf("%s (%s:%.2f) -> %s (%s:%.2f)\n", pkg.parent.ID, pkg.parent.name, pkg.parent.Stability, pkg.ID, pkg.name, pkg.Stability))
 		}
 	}
 

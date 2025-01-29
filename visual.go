@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/LazarenkoA/go-stability-linter/app"
 	"github.com/pterm/pterm"
 	"math"
@@ -13,6 +14,7 @@ func print(tree []*app.PackageInfo) {
 	for _, l := range tree {
 		if l.Parent == nil {
 			helperPrint(l, 0)
+			fmt.Print("\n")
 		}
 	}
 }

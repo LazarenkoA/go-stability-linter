@@ -12,7 +12,7 @@ import (
 
 func print(tree []*app.PackageInfo, subStringExclude string) {
 	for _, l := range tree {
-		if l.Parent == nil && (subStringExclude == "" || !strings.Contains(l.ID, subStringExclude)) {
+		if len(l.Parents) > 0 && (subStringExclude == "" || !strings.Contains(l.ID, subStringExclude)) {
 			helperPrint([]*app.PackageInfo{l}, 0)
 			fmt.Print("\n")
 		}

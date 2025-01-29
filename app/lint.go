@@ -17,7 +17,7 @@ type PackageInfo struct {
 	Stability float64 // О - соответствует максимальной устойчивости компонента, 1 - максимальной неустойчивости.
 	inCount   int
 	outCount  int
-	Parent    *PackageInfo
+	Parents   []*PackageInfo
 	Childs    []*PackageInfo
 }
 
@@ -87,7 +87,7 @@ func createItem(currentApp string, existing map[string]*PackageInfo, pkg *RawPac
 			pinfo.outCount++
 			p.inCount++
 
-			p.Parent = pinfo
+			p.Parents = append(p.Parents, pinfo)
 			pinfo.Childs = append(pinfo.Childs, p)
 		}
 	}
@@ -97,8 +97,10 @@ func createItem(currentApp string, existing map[string]*PackageInfo, pkg *RawPac
 
 func check(pkgs map[string]*PackageInfo) (err error) {
 	for _, pkg := range pkgs {
-		if pkg.Parent != nil && pkg.Stability > pkg.Parent.Stability {
-			err = errors.Join(err, fmt.Errorf("%s (%s:%.2f) -> %s (%s:%.2f)\n", pkg.Parent.ID, pkg.Parent.name, pkg.Parent.Stability, pkg.ID, pkg.name, pkg.Stability))
+		for _, phather := range pkg.Parents {
+			if pkg.Stability > phather.Stability {
+				err = errors.Join(err, fmt.Errorf("%s (%s:%.2f) -> %s (%s:%.2f)\n", phather.ID, phather.name, phather.Stability, pkg.ID, pkg.name, pkg.Stability))
+			}
 		}
 	}
 

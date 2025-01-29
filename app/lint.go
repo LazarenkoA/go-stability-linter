@@ -18,7 +18,7 @@ type PackageInfo struct {
 	inCount   int
 	outCount  int
 	Parent    *PackageInfo
-	Next      *PackageInfo
+	Childs    []*PackageInfo
 }
 
 type RawPackageInfo struct {
@@ -87,7 +87,8 @@ func createItem(currentApp string, existing map[string]*PackageInfo, pkg *RawPac
 			pinfo.outCount++
 			p.inCount++
 
-			p.Parent, pinfo.Next = pinfo, p
+			p.Parent = pinfo
+			pinfo.Childs = append(pinfo.Childs, p)
 		}
 	}
 

@@ -13,6 +13,7 @@ func init() {
 
 func main() {
 	var verbose bool
+	var exclude string
 
 	var rootCmd = &cobra.Command{
 		Use:   "go-stability-linter [directory]",
@@ -32,12 +33,13 @@ func main() {
 					os.Exit(1)
 				}
 			} else {
-				print(l.GetPackageInfoTree())
+				print(l.GetPackageInfoTree(), exclude)
 			}
 		},
 	}
 
 	rootCmd.Flags().BoolVarP(&verbose, "tree", "t", false, "visual tree output")
+	rootCmd.Flags().StringVarP(&exclude, "exclude", "e", "", "excludes top-level packages. Checks for the occurrence of a substring in a string (used with the true parameter)")
 
 	if err := rootCmd.Execute(); err != nil {
 		_, _ = fmt.Fprintf(os.Stderr, "%s\n", err.Error())

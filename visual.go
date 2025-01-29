@@ -10,23 +10,26 @@ import (
 
 // реши установленную задачу на Go
 
-func print(tree []*app.PackageInfo) {
+func print(tree []*app.PackageInfo, subStringExclude string) {
 	for _, l := range tree {
-		if l.Parent == nil {
-			helperPrint(l, 0)
+		if l.Parent == nil && (subStringExclude == "" || !strings.Contains(l.ID, subStringExclude)) {
+			helperPrint([]*app.PackageInfo{l}, 0)
 			fmt.Print("\n")
 		}
 	}
 }
 
-func helperPrint(node *app.PackageInfo, shift int) {
-	if node == nil {
+func helperPrint(nodes []*app.PackageInfo, shift int) {
+	if nodes == nil {
 		return
 	}
 
-	r, g, b := HSVToRGB(mapRange(node.Stability, 1, 0, 0, 100), 100, 200)
-	pterm.NewRGB(r, g, b).Printf("%s%s - %.2f\n", strings.Repeat("\t", shift), node.ID, node.Stability)
-	helperPrint(node.Next, shift+1)
+	for _, node := range nodes {
+		r, g, b := HSVToRGB(mapRange(node.Stability, 1, 0, 0, 120), 100, 200)
+		pterm.NewRGB(r, g, b).Printf("%s%s - %.2f\n", strings.Repeat("\t", shift), node.ID, node.Stability)
+		helperPrint(node.Childs, shift+1)
+	}
+
 }
 
 // mapRange масштабирует значение из одного диапазона в другой

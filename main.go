@@ -32,12 +32,12 @@ func main() {
 					os.Exit(1)
 				}
 			} else {
-				print(l.CheckLog())
+				print(l.GetPackageInfoTree())
 			}
 		},
 	}
 
-	rootCmd.Flags().BoolVarP(&verbose, "visual", "v", false, "enable detailed output")
+	rootCmd.Flags().BoolVarP(&verbose, "tree", "t", false, "visual tree output")
 
 	if err := rootCmd.Execute(); err != nil {
 		_, _ = fmt.Fprintf(os.Stderr, "%s\n", err.Error())

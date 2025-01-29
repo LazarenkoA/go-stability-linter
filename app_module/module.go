@@ -68,7 +68,7 @@ func (l *stabilityLint) Check() error {
 	return app.Check(l.mainName, l.packages)
 }
 
-func (l *stabilityLint) CheckLog() []*CheckLogsInfo {
+func (l *stabilityLint) GetDepList() []*CheckLogsInfo {
 	pInfo := app.GetPackageInfo(l.mainName, l.packages)
 	result := make([]*CheckLogsInfo, 0, len(pInfo))
 
@@ -80,6 +80,10 @@ func (l *stabilityLint) CheckLog() []*CheckLogsInfo {
 	}
 
 	return result
+}
+
+func (l *stabilityLint) GetPackageInfoTree() []*app.PackageInfo {
+	return app.GetPackageInfo(l.mainName, l.packages)
 }
 
 func (l *stabilityLint) isStdPackage(pkgPath string) bool {

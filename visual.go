@@ -1,16 +1,30 @@
 package main
 
 import (
-	"github.com/LazarenkoA/go-stability-linter/app_module"
+	"github.com/LazarenkoA/go-stability-linter/app"
 	"github.com/pterm/pterm"
 	"math"
+	"strings"
 )
 
-func print(log []*app_module.CheckLogsInfo) {
-	for _, l := range log {
-		r, g, b := HSVToRGB(mapRange(l.I, 1, 0, 0, 100), 100, 200)
-		pterm.NewRGB(r, g, b).Printf("%s - %.2f\n", l.Package, l.I)
+// реши установленную задачу на Go
+
+func print(tree []*app.PackageInfo) {
+	for _, l := range tree {
+		if l.Parent == nil {
+			helperPrint(l, 0)
+		}
 	}
+}
+
+func helperPrint(node *app.PackageInfo, shift int) {
+	if node == nil {
+		return
+	}
+
+	r, g, b := HSVToRGB(mapRange(node.Stability, 1, 0, 0, 100), 100, 200)
+	pterm.NewRGB(r, g, b).Printf("%s%s - %.2f\n", strings.Repeat("\t", shift), node.ID, node.Stability)
+	helperPrint(node.Next, shift+1)
 }
 
 // mapRange масштабирует значение из одного диапазона в другой

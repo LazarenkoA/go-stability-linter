@@ -37,7 +37,7 @@ func main() {
 		},
 	}
 
-	rootCmd.Flags().BoolVarP(&verbose, "verbose", "v", false, "enable detailed output")
+	rootCmd.Flags().BoolVarP(&verbose, "visual", "v", false, "enable detailed output")
 
 	if err := rootCmd.Execute(); err != nil {
 		_, _ = fmt.Fprintf(os.Stderr, "%s\n", err.Error())

@@ -97,10 +97,6 @@ func createItem(currentApp string, existing map[string]*PackageInfo, pkg *RawPac
 
 func check(pkgs map[string]*PackageInfo) (err error) {
 	for _, pkg := range pkgs {
-		if pkg.Parent == nil {
-			fmt.Println(pkg.ID)
-		}
-
 		if pkg.Parent != nil && pkg.Stability > pkg.Parent.Stability {
 			err = errors.Join(err, fmt.Errorf("%s (%s:%.2f) -> %s (%s:%.2f)\n", pkg.Parent.ID, pkg.Parent.name, pkg.Parent.Stability, pkg.ID, pkg.name, pkg.Stability))
 		}
